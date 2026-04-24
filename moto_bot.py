@@ -1,7 +1,9 @@
+import argparse
 import feedparser
 import json
 import os
 import smtplib
+import sys
 import time
 from datetime import datetime
 from email.mime.multipart import MIMEMultipart
@@ -10,8 +12,11 @@ from urllib.parse import quote
 
 # Config
 SEEN_FILE = "seen_listings.json"
-KEYWORDS = ["R1200GS", "R 1200 GS", "R1200 GS"]
-CL_REGIONS = ["sfbay", "sacramento", "monterey", "stockton", "reno"]
+KEYWORDS = ["R1200GS", "R 1200 GS", "R1200 GS", "BMW GS", "R1200"]
+CL_REGIONS = [
+    "sfbay", "sacramento", "monterey", "stockton", "reno",
+    "losangeles", "sandiego", "portland", "seattle", "phoenix",
+]
 MIN_PRICE = 7500
 MAX_PRICE = 8500
 
@@ -121,7 +126,30 @@ def send_email(listings):
     print(f"Email sent to {EMAIL_TO}")
 
 
+def send_test_email():
+    """Send a test email to verify email configuration works."""
+    test_listing = [
+        {
+            "title": "[TEST] BMW R1200GS 2018 - $8,000 (Test Listing)",
+            "link": "https://github.com/vivekgr92/bike-finder",
+            "source": "TEST",
+            "found_at": datetime.now().isoformat(),
+        }
+    ]
+    print("Sending test email...")
+    send_email(test_listing)
+    print("Test email sent successfully! Check your inbox.")
+
+
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--test-email", action="store_true", help="Send a test email")
+    args = parser.parse_args()
+
+    if args.test_email:
+        send_test_email()
+        return
+
     print(f"=== BMW R1200GS 2018 Search ({datetime.now().isoformat()}) ===")
     print(f"Price range: ${MIN_PRICE:,} - ${MAX_PRICE:,}")
 
