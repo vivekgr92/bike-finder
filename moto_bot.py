@@ -6,6 +6,7 @@ import time
 from datetime import datetime
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+from urllib.parse import quote
 
 # Config
 SEEN_FILE = "seen_listings.json"
@@ -40,7 +41,7 @@ def search_craigslist(seen):
         for keyword in KEYWORDS:
             url = (
                 f"https://{region}.craigslist.org/search/mca?format=rss"
-                f"&query={keyword}&min_price={MIN_PRICE}&max_price={MAX_PRICE}"
+                f"&query={quote(keyword)}&min_price={MIN_PRICE}&max_price={MAX_PRICE}"
             )
             print(f"Checking: {region} for '{keyword}'...")
             feed = feedparser.parse(url)
