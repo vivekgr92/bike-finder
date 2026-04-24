@@ -12,7 +12,7 @@ from urllib.parse import quote
 
 # Config
 SEEN_FILE = "seen_listings.json"
-KEYWORDS = ["R1200GS", "R 1200 GS", "R1200 GS", "BMW GS", "R1200"]
+KEYWORDS = ["R1200GS", "R 1200 GS", "R1200 GS", "BMW GS", "R1200", "R1200GSA", "R1200 GSA"]
 CL_REGIONS = [
     "sfbay", "sacramento", "monterey", "stockton", "reno",
     "losangeles", "sandiego", "portland", "seattle", "phoenix",
