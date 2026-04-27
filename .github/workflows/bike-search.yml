@@ -2,8 +2,8 @@ name: BMW R1200GS Bike Search
 
 on:
   schedule:
-    # Run every hour
-    - cron: '0 * * * *'
+    # Run every 5 hours
+    - cron: '0 */5 * * *'
   workflow_dispatch:
     inputs:
       test_email:

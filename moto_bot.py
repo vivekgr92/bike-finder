@@ -18,7 +18,8 @@ CL_REGIONS = [
     "losangeles", "sandiego", "portland", "seattle", "phoenix",
 ]
 MIN_PRICE = 7500
-MAX_PRICE = 8500
+MAX_PRICE = 10500
+TARGET_YEARS = ["2017", "2018", "2019"]
 
 # Email config from environment
 SMTP_SERVER = os.environ.get("SMTP_SERVER", "smtp.gmail.com")
@@ -52,8 +53,7 @@ def search_craigslist(seen):
             feed = feedparser.parse(url)
             for entry in feed.entries:
                 title_lower = entry.title.lower()
-                # Filter for 2018 model year
-                if "2018" in title_lower or "18" in title_lower:
+                if any(year in title_lower for year in TARGET_YEARS):
                     if entry.id not in seen:
                         new_listings.append(
                             {
@@ -79,8 +79,9 @@ def send_email(listings):
     msg["To"] = EMAIL_TO
 
     # Plain text version
+    year_label = "/".join(TARGET_YEARS)
     text_lines = [
-        f"Found {len(listings)} new BMW R1200GS 2018 listing(s):\n"
+        f"Found {len(listings)} new BMW R1200GS {year_label} listing(s):\n"
     ]
     for listing in listings:
         text_lines.append(f"[{listing['source']}] {listing['title']}")
@@ -103,7 +104,7 @@ def send_email(listings):
     html_body = f"""
     <html>
     <body>
-        <h2>BMW R1200GS 2018 - New Listings Found!</h2>
+        <h2>BMW R1200GS {year_label} - New Listings Found!</h2>
         <p>Price range: ${MIN_PRICE:,} - ${MAX_PRICE:,}</p>
         <table style="border-collapse:collapse;width:100%;">
             <tr style="background:#f2f2f2;">
@@ -150,7 +151,8 @@ def main():
         send_test_email()
         return
 
-    print(f"=== BMW R1200GS 2018 Search ({datetime.now().isoformat()}) ===")
+    year_label = "/".join(TARGET_YEARS)
+    print(f"=== BMW R1200GS {year_label} Search ({datetime.now().isoformat()}) ===")
     print(f"Price range: ${MIN_PRICE:,} - ${MAX_PRICE:,}")
 
     seen = load_seen()
